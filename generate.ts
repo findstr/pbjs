@@ -980,5 +980,18 @@ export function generate(schema: Schema, options?: Options): string {
   lines.push(`}`);
   lines.push(``);
 
+  lines.push(`${codeForEnumExport('encoder')}${ts(`{ [key: string]: Function }`)} = {`);
+  for (const def of schema.messages) {
+      lines.push(`  ${def.name}: ${prefix}encode${def.name},`);
+  }
+  lines.push(`};`);
+  lines.push('');
+
+  lines.push(`${codeForEnumExport('decoder')}${ts(`{ [key: string]: Function }`)} = {`);
+  for (const def of schema.messages) {
+      lines.push(`  ${def.name}: ${prefix}decode${def.name},`);
+  }
+  lines.push(`};`);
+  lines.push('');
   return lines.join('\n');
 }
