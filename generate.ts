@@ -47,7 +47,9 @@ export function generate(schema: Schema, options?: Options): string {
   function codeForEnumExport(name: string): string {
     return es6 ? `export const ${name}` : `${pkg}.${name}`;
   }
-
+  if (typescript) {
+    lines.push(`namespace ${schema.package} {`);
+  }
   for (const def of schema.enums) {
     const prefix = def.name + '_';
     const items: string[] = [];
@@ -993,5 +995,8 @@ export function generate(schema: Schema, options?: Options): string {
   }
   lines.push(`};`);
   lines.push('');
+  if (typescript) {
+    lines.push(`}`);
+  }
   return lines.join('\n');
 }
